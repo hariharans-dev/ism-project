@@ -1,4 +1,4 @@
-const { client, connectToMongoDB } = require("../model/data_model.js");
+const { client, connectToMongoDB } = require("../../model/data_model.js");
 
 connectToMongoDB();
 class Attendance {

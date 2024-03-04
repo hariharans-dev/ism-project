@@ -1,4 +1,4 @@
-const { client, connectToMongoDB } = require("../model/data_model.js");
+const { client, connectToMongoDB } = require("../../model/data_model.js");
 
 connectToMongoDB();
 class IP {
@@ -25,8 +25,11 @@ class IP {
       const collections = client
         .db(process.env.DB)
         .collection(process.env.COLLECTION_IP_LOGS);
-      const cursor = collections.find().limit(limit);
-      const result = cursor.toArray();
+      const cursor = collections
+        .find()
+        .sort({ timestampField: 1 })
+        .limit(limit); // Assuming timestampField represents time
+      const result = cursor.toArray(); // Convert cursor to array
       return result;
     } catch (error) {
       return error;

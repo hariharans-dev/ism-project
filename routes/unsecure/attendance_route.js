@@ -5,7 +5,7 @@ const {
   verifyIPaddr,
   add_attendance,
   show_attendance,
-} = require("../controller/api_controller");
+} = require("../../controller/unsecure/api_controller");
 
 const validateRequestBody_show_attendance = [
   (req, res, next) => {

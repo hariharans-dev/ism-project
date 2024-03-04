@@ -6,7 +6,7 @@ const {
   add_registered_ip,
   show_ip_log,
   verifyIPaddr,
-} = require("../controller/api_controller");
+} = require("../../controller/unsecure/api_controller");
 
 const show_registered_ip_middleware = [];
 router.get(
