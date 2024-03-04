@@ -1,5 +1,6 @@
 # ism-project
-ism project regarding ipspoofing and its inovative mitigation solutions\n
+
+ism project regarding ipspoofing and its inovative mitigation solutions
 
 ipspoofing is performed on udp based IOT devices
 mitigation solutions is digital signature using a public key authority
