@@ -14,14 +14,12 @@ def forge_and_send_udp_packet(src_ip, src_port, dst_ip, dst_port, payload):
     # Send the packet
     send(packet)
 
-source_ip = "127.0.0.10"
+source_ip = "127.0.0.1"
 source_port = 12345
-destination_ip = "127.0.0.1"
+destination_ip = "0.0.0.0"
 destination_port = 4000
 payload_data = {
-    "message": "Hello, this is a forged UDP packet!",
-    "user_id": 123,
-    "timestamp": "2024-03-04T12:00:00"
+    "regno": "21BIT0000"
 }
 
 # Convert payload_data to JSON format

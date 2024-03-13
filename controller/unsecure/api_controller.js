@@ -38,6 +38,26 @@ const verifyIPaddr = async (req, res, next) => {
   next();
 };
 
+const verifyIPUDP = async (sourceIP, message) => {
+  const allowedIPRange = await registered_ip();
+  if (!allowedIPRange.includes(sourceIP)) {
+    add_ip_log(sourceIP, "reject", message, new Date());
+    return false;
+  }
+  add_ip_log(sourceIP, "accept", message, new Date());
+  return true;
+};
+
+const addattendanceudp = async (regno) => {
+  try {
+    const data = { regno: regno };
+    await attendance_object.addattendance(data);
+    return true;
+  } catch (error) {
+    return error;
+  }
+};
+
 const registered_ip = async () => {
   try {
     return await ip_object.findregisteredip();
@@ -112,4 +132,6 @@ module.exports = {
   show_ip_log,
   add_ip_log,
   verifyIPaddr,
+  verifyIPUDP,
+  addattendanceudp,
 };
