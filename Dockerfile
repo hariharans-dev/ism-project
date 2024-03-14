@@ -12,3 +12,5 @@ RUN npm install
 COPY . .
 EXPOSE 5000
 CMD [ "node", "api.js" ]
+EXPOSE 4000
+CMD ["node","udp_endpoint.js"]
