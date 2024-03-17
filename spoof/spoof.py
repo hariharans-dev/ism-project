@@ -14,12 +14,12 @@ def forge_and_send_udp_packet(src_ip, src_port, dst_ip, dst_port, payload):
     # Send the packet
     send(packet)
 
-source_ip = "157.51.21.151"
+source_ip = "157.51.98.156"
 source_port = 10000
-destination_ip = "157.51.165.65"
-destination_port = 4000
+destination_ip = "3.110.92.45"
+destination_port = 3001
 payload_data = {
-    "regno": "21BIT0143"
+    "regno": "eih3io3"
 }
 
 # Convert payload_data to JSON format

@@ -10,6 +10,7 @@ const {
 } = require("./controller/unsecure/api_controller");
 
 server.on("message", async (message, remote) => {
+  console.log(remote.address);
   try {
     const valid = await verifyIPUDP(remote.address);
     const date = new Date();
@@ -33,4 +34,4 @@ server.on("listening", () => {
 
 const PORT = 4000;
 
-server.bind(PORT);
+server.bind(PORT, "127.0.0.1");
