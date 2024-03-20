@@ -1,33 +1,29 @@
-const crypto = require('crypto');
-const fs = require('fs');
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+const crypto = require("crypto");
+const fs = require("fs");
 
-const keygeneration=(ip)=>{
+const keygeneration = async (ip) => {
   console.log("key");
-  const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+  const { publicKey, privateKey } = await crypto.generateKeyPairSync("rsa", {
     modulusLength: 2048,
     publicKeyEncoding: {
-      type: 'pkcs1',
-      format: 'pem'
+      type: "pkcs1",
+      format: "pem",
     },
     privateKeyEncoding: {
-      type: 'pkcs1',
-      format: 'pem'
-    }
+      type: "pkcs1",
+      format: "pem",
+    },
   });
-  
-  fs.writeFileSync('key/'+ip+'private.pem', privateKey);
-  fs.writeFileSync('key/'+ip+'public.pem', publicKey);
-}
+
+  await fs.writeFileSync("key_authority/key/" + ip + "private.pem", privateKey);
+  await fs.writeFileSync("key_authority/key/" + ip + "public.pem", publicKey);
+};
 
 function keydeletion(ip) {
-  const filePathprivate='key/'+ip+'private.pem';
-  const filePathpublic='key/'+ip+'public.pem'
-  deletefile(filePathprivate)
-  deletefile(filePathpublic)
+  const filePathprivate = "key/" + ip + "private.pem";
+  const filePathpublic = "key/" + ip + "public.pem";
+  deletefile(filePathprivate);
+  deletefile(filePathpublic);
 }
 
 function deletefile(filePath) {
@@ -40,8 +36,8 @@ function deletefile(filePath) {
   });
 }
 
-function createfile(filePath){
+function createfile(filePath) {
   fs.writeFileSync(filePath);
 }
 
-module.exports={keygeneration,keydeletion};
+module.exports = { keygeneration, keydeletion };

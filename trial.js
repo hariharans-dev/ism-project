@@ -1,47 +1,39 @@
-const dgram = require("dgram");
+const crypto = require("crypto");
+const fs = require("fs");
 
-function forgeAndSendUDPPacket(srcIP, srcPort, dstIP, dstPort, payload) {
-  // Create a UDP socket
-  const udpClient = dgram.createSocket("udp4");
-
-  // Convert payload to JSON string
-  const payloadJSON = JSON.stringify(payload);
-
-  // Create the message buffer
-  const messageBuffer = Buffer.from(payloadJSON);
-
-  // Send the UDP packet
-  udpClient.send(
-    messageBuffer,
-    0,
-    messageBuffer.length,
-    dstPort,
-    dstIP,
-    (err) => {
-      if (err) {
-        console.error("Error sending UDP packet:", err);
-      } else {
-        console.log("UDP packet sent successfully.");
-      }
-      // Close the socket when done
-      udpClient.close();
-    }
-  );
+function readfile(pemFilePath) {
+  try {
+    const pemData = fs.readFileSync(pemFilePath, "utf8");
+    return pemData;
+  } catch (error) {
+    console.error("Error reading PEM file:", error);
+    throw error;
+  }
 }
 
-const sourceIP = "157.51.98.156";
-const sourcePort = 10000;
-const destinationIP = "3.110.92.45";
-const destinationPort = 3001;
-const payloadData = {
-  regno: "98984thanskse",
-};
+function generateDigitalSignature(data, privateKeypath) {
+  const privateKey = readfile(privateKeypath);
+  const sign = crypto.createSign("RSA-SHA256");
+  sign.update(data);
+  return sign.sign(privateKey, "base64");
+}
 
-// Forge and send the UDP packet
-forgeAndSendUDPPacket(
-  sourceIP,
-  sourcePort,
-  destinationIP,
-  destinationPort,
-  payloadData
+function verifyDigitalSignature(data, signature, publicKeypath) {
+  try {
+    const publicKey = readfile(publicKeypath);
+    const verify = crypto.createVerify("RSA-SHA256");
+    verify.update(data);
+    return verify.verify(publicKey, signature, "base64");
+  } catch (error) {
+    return false;
+  }
+}
+
+const sign = generateDigitalSignature(
+  "21BIT0224",
+  "key_authority/key/private.pem"
+);
+
+console.log(
+  verifyDigitalSignature("21BIT0224", sign, "key_authority/key/public.pem")
 );

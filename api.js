@@ -9,8 +9,8 @@ app.use(
   })
 );
 
-const attendance_router = require("./routes/unsecure/attendance_route");
-const ip_router = require("./routes/unsecure/ip_route");
+const attendance_router = require("./routes/attendance_route");
+const ip_router = require("./routes/ip_route");
 
 app.use("/attendance", attendance_router);
 app.use("/ip", ip_router);
