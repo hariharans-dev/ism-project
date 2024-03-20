@@ -5,8 +5,11 @@ const {
   show_registered_ip,
   add_registered_ip,
   show_ip_log,
-  verifyIPaddr,
+  show_remote_ip,
 } = require("../controller/api_controller");
+
+const show_my_ip = [];
+router.get("/show-source-ip", show_my_ip, show_remote_ip);
 
 const show_registered_ip_middleware = [];
 router.get(

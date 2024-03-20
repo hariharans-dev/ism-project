@@ -71,6 +71,10 @@ const registered_ip = async () => {
   }
 };
 
+const show_remote_ip = (req, res) => {
+  return res.send(req.ip);
+};
+
 const show_registered_ip = async (req, res) => {
   try {
     const data = await ip_object.findregisteredip();
@@ -157,4 +161,5 @@ module.exports = {
   verifyIPUDP,
   addattendanceudp,
   verify_message,
+  show_remote_ip,
 };
