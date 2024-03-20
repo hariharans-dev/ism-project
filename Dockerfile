@@ -1,16 +1,27 @@
 FROM node:18
+
+# Install Supervisor
+RUN apt-get update && apt-get install -y supervisor
+
 # Create app directory
 WORKDIR /usr/src/app
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install app dependencies
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --omit=dev
-# Bundle app source
+
+# Copy the rest of the application source code
 COPY . .
+
+# Expose ports
 EXPOSE 5000
-CMD [ "node", "api.js" ]
 EXPOSE 4000
-CMD ["node","udp_endpoint.js"]
+EXPOSE 3000
+
+# Copy Supervisor configuration file
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Start Supervisor
+CMD ["/usr/bin/supervisord"]
