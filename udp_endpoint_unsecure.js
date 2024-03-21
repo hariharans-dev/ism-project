@@ -13,12 +13,12 @@ server.on("message", async (message, remote) => {
     const valid = await verifyIPUDP(remote.address);
     const date = new Date();
     if (!valid) {
-      add_ip_log(remote.address, "reject", message, date);
+      const msg = JSON.stringify(JSON.parse(message));
+      add_ip_log(remote.address, "reject", msg, date);
     } else {
-      const msg = JSON.parse(message);
-      console.log(msg);
+      const msg = JSON.stringify(JSON.parse(message));
       await addattendanceudp(msg.regno);
-      await add_ip_log(remote.address, "accept", message, date);
+      await add_ip_log(remote.address, "accept", msg, date);
     }
     return "success";
   } catch (error) {
@@ -31,6 +31,6 @@ server.on("listening", () => {
   console.log(`UDP server listening on ${address.address}:${address.port}`);
 });
 
-const PORT = 4000;
+const PORT = 6000;
 
 server.bind(PORT, "127.0.0.1");

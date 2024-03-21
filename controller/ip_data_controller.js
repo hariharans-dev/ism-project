@@ -53,6 +53,26 @@ class IP {
     }
   }
 
+  deleteregisteredip(data) {
+    try {
+      const collections = client
+        .db(process.env.DB)
+        .collection(process.env.COLLECTION_REGISTERED_IP);
+
+      const result = collections.deleteOne(data, {
+        writeConcern: {
+          w: "majority",
+          wtimeout: 0,
+          provenance: "clientSupplied",
+        },
+      });
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async findregisteredip() {
     try {
       const collections = client

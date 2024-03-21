@@ -31,14 +31,12 @@ const verifyIPaddr = async (req, res, next) => {
   const ipaddr = ipv6Toipv4(sourceIP);
   if (!allowedIPRange.includes(ipaddr)) {
     if (req.url == "/add-attendance") {
-      add_ip_log(ipaddr, "reject", req.body, new Date());
     }
     return res
       .status(403)
       .json({ message: "Access Forbidden. Your IP address is not allowed." });
   }
   if (req.url == "/add-attendance") {
-    add_ip_log(ipaddr, "accept", req.body, new Date());
   }
   next();
 };
@@ -46,10 +44,8 @@ const verifyIPaddr = async (req, res, next) => {
 const verifyIPUDP = async (sourceIP, message) => {
   const allowedIPRange = await registered_ip();
   if (!allowedIPRange.includes(sourceIP)) {
-    add_ip_log(sourceIP, "reject", message, new Date());
     return false;
   }
-  add_ip_log(sourceIP, "accept", message, new Date());
   return true;
 };
 
@@ -90,6 +86,16 @@ const add_registered_ip = async (req, res) => {
     console.log(data);
     ip_object.addregisteredip(data);
     return res.status(200).json({ message: "registered successful" });
+  } catch (error) {
+    return res.status(500).json({ message: "server error" });
+  }
+};
+
+const deleteregisteredip = (req, res) => {
+  try {
+    const data = { ipaddr: req.body.ipaddr };
+    ip_object.deleteregisteredip(data);
+    return res.status(200).json({ message: "delete successful" });
   } catch (error) {
     return res.status(500).json({ message: "server error" });
   }
@@ -162,4 +168,5 @@ module.exports = {
   addattendanceudp,
   verify_message,
   show_remote_ip,
+  deleteregisteredip,
 };
