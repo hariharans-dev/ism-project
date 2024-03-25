@@ -1,10 +1,7 @@
 const IP = require("./ip_data_controller");
 const Attendance = require("./attendance_registery_data_controller");
 
-const {
-  verifyDigitalSignature,
-  generateDigitalSignature,
-} = require("../key_authority/digitalsignature");
+const { verifyDigitalSignature } = require("../key_authority/digitalsignature");
 
 const ip_object = new IP();
 const attendance_object = new Attendance();
@@ -83,7 +80,6 @@ const show_registered_ip = async (req, res) => {
 const add_registered_ip = async (req, res) => {
   try {
     const data = { ipaddr: req.body.ipaddr };
-    console.log(data);
     ip_object.addregisteredip(data);
     return res.status(200).json({ message: "registered successful" });
   } catch (error) {
