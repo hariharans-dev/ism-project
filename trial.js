@@ -1,32 +1,22 @@
-const express = require('express');
-const app = express();
+const dgram = require("dgram");
 
-// Sample data
-const data = [
-    {
-        "id": 25,
-        "temperature": 25,
-        "humidity": 40,
-        "pressure": 1013,
-        "createdAt": "2024-03-25T15:21:58.000Z"
-    },
-    {
-        "id": 24,
-        "temperature": 25,
-        "humidity": 45,
-        "pressure": 1013,
-        "createdAt": "2024-03-25T15:19:19.000Z"
-    },
-    // Add more data here if needed
-];
+const client = dgram.createSocket("udp4");
+const HOST = "192.168.16.133";
+const PORT = 3001;
 
-// Route to send the data
-app.get('/data', (req, res) => {
-    res.json(data);
-});
+const sensorData = {
+  regno: "21BIT0000",
+};
 
-// Starting the server
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// Convert sensorData object to JSON string
+const sensorDataString = JSON.stringify(sensorData);
+console.log(sensorDataString);
+
+// Send encrypted message to server
+client.send(Buffer.from(sensorDataString, "hex"), PORT, HOST, (err) => {
+  if (err) {
+    console.log("Error sending message:", err);
+  } else {
+    console.log("Encrypted message sent to server");
+  }
 });
