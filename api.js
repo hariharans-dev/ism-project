@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 app.use(express.json());
+const udpserver_secure = require("./udp_endpoint_secure");
+const udpserver_unsecure = require("./udp_endpoint_unsecure");
 
 app.use(
   cors({
@@ -21,5 +23,5 @@ app.get("/health", (req, res) => {
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Api-Server at http://0.0.0.0:${PORT}/`);
 });

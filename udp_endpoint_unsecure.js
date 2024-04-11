@@ -1,25 +1,30 @@
-const dgram = require("dgram");
-
-const server = dgram.createSocket("udp4");
-
 const {
   verifyIPUDP,
   addattendanceudp,
   add_ip_log,
 } = require("./controller/api_controller");
 
-server.on("message", async (message, remote) => {
+const dgram = require("dgram");
+
+const udpServer = dgram.createSocket("udp4");
+const UDP_PORT = 6000;
+
+udpServer.on("error", (err) => {
+  udpServer.close();
+});
+
+udpServer.on("message", async (message, remote) => {
   try {
+    const msgs = message.toString("utf-8");
+    console.log(msgs);
     const valid = await verifyIPUDP(remote.address);
     const date = new Date();
     if (!valid) {
-      const msg = JSON.stringify(JSON.parse(message));
-      add_ip_log(remote.address, "reject", msg, date);
+      add_ip_log(remote.address, "reject", msgs, date);
     } else {
-      const parsedMessage = JSON.parse(message);
+      const parsedMessage = JSON.parse(msgs);
       const regno = parsedMessage.regno; // Extracting regno from the message
       const msg = JSON.stringify(parsedMessage);
-      console.log(msg);
       await addattendanceudp(regno);
       await add_ip_log(remote.address, "accept", msg, date);
     }
@@ -29,11 +34,11 @@ server.on("message", async (message, remote) => {
   }
 });
 
-server.on("listening", () => {
-  const address = server.address();
-  console.log(`UDP server listening on ${address.address}:${address.port}`);
+udpServer.on("listening", () => {
+  const address = udpServer.address();
+  console.log(
+    "Udp-Secure-Server at http://" + address.address + ":" + address.port + "/"
+  );
 });
 
-const PORT = 6000;
-
-server.bind(PORT, "127.0.0.1");
+udpServer.bind(UDP_PORT);

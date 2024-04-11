@@ -1,9 +1,10 @@
 const crypto = require("crypto");
 const fs = require("fs");
+const path = require("path");
 
 function readfile(pemFilePath) {
   try {
-    const pemData = fs.readFileSync(pemFilePath, "utf8");
+    const pemData = fs.readFileSync(path.join(__dirname, pemFilePath), "utf8");
     return pemData;
   } catch (error) {
     console.error("Error reading PEM file:", error);
@@ -18,6 +19,4 @@ function generateDigitalSignature(data, privateKeypath) {
   return sign.sign(privateKey, "base64");
 }
 
-console.log(
-  generateDigitalSignature("21BIT0143", "key_authority/key/private.pem")
-);
+console.log(generateDigitalSignature("21BIT0224", "private.pem"));
