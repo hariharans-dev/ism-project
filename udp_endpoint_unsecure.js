@@ -16,8 +16,11 @@ server.on("message", async (message, remote) => {
       const msg = JSON.stringify(JSON.parse(message));
       add_ip_log(remote.address, "reject", msg, date);
     } else {
-      const msg = JSON.stringify(JSON.parse(message));
-      await addattendanceudp(msg.regno);
+      const parsedMessage = JSON.parse(message);
+      const regno = parsedMessage.regno; // Extracting regno from the message
+      const msg = JSON.stringify(parsedMessage);
+      console.log(msg);
+      await addattendanceudp(regno);
       await add_ip_log(remote.address, "accept", msg, date);
     }
     return "success";

@@ -1,16 +1,23 @@
-const http = require('http'); 
-const {keygeneration,keydeletion}=require("./keyfunctions")
+const crypto = require("crypto");
+const fs = require("fs");
 
-function yourProcess() {
-    keygeneration('hari');
+function readfile(pemFilePath) {
+  try {
+    const pemData = fs.readFileSync(pemFilePath, "utf8");
+    return pemData;
+  } catch (error) {
+    console.error("Error reading PEM file:", error);
+    throw error;
+  }
 }
-const interval = 0.1 * 60 * 1000;
-const server = http.createServer((req, res) => {
-  res.writeHead(200);
-  res.end('Server is running!');
-});
-server.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
-yourProcess();
-setInterval(yourProcess, interval);
+
+function generateDigitalSignature(data, privateKeypath) {
+  const privateKey = readfile(privateKeypath);
+  const sign = crypto.createSign("RSA-SHA256");
+  sign.update(data);
+  return sign.sign(privateKey, "base64");
+}
+
+console.log(
+  generateDigitalSignature("21BIT0143", "key_authority/key/private.pem")
+);

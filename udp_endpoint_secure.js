@@ -1,6 +1,6 @@
 const dgram = require("dgram");
 
-const server = dgram.createSocket("udp4");
+const udpServer = dgram.createSocket("udp4");
 
 const {
   verifyIPUDP,
@@ -9,10 +9,15 @@ const {
   verify_message,
 } = require("./controller/api_controller");
 
-server.on("message", async (message, remote) => {
+udpServer.on("error", (err) => {
+  logger.error(`UDP Server error:\n${err.stack}`);
+  udpServer.close();
+});
+
+udpServer.on("message", async (message, remote) => {
   try {
     const msg = JSON.parse(message);
-
+    console.log(msg);
     const valid = await verifyIPUDP(remote.address);
     const status = await verify_message(msg);
 
@@ -31,11 +36,11 @@ server.on("message", async (message, remote) => {
   }
 });
 
-server.on("listening", () => {
-  const address = server.address();
-  console.log(`UDP server listening on ${address.address}:${address.port}`);
+udpServer.on("listening", () => {
+  const address = udpServer.address();
+  console.log(address);
 });
 
-const PORT = 7000;
+const UDP_PORT = 4000;
 
-server.bind(PORT, "127.0.0.1");
+udpServer.bind(UDP_PORT);

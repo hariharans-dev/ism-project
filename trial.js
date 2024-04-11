@@ -1,39 +1,32 @@
-const crypto = require("crypto");
-const fs = require("fs");
+const express = require('express');
+const app = express();
 
-function readfile(pemFilePath) {
-  try {
-    const pemData = fs.readFileSync(pemFilePath, "utf8");
-    return pemData;
-  } catch (error) {
-    console.error("Error reading PEM file:", error);
-    throw error;
-  }
-}
+// Sample data
+const data = [
+    {
+        "id": 25,
+        "temperature": 25,
+        "humidity": 40,
+        "pressure": 1013,
+        "createdAt": "2024-03-25T15:21:58.000Z"
+    },
+    {
+        "id": 24,
+        "temperature": 25,
+        "humidity": 45,
+        "pressure": 1013,
+        "createdAt": "2024-03-25T15:19:19.000Z"
+    },
+    // Add more data here if needed
+];
 
-function generateDigitalSignature(data, privateKeypath) {
-  const privateKey = readfile(privateKeypath);
-  const sign = crypto.createSign("RSA-SHA256");
-  sign.update(data);
-  return sign.sign(privateKey, "base64");
-}
+// Route to send the data
+app.get('/data', (req, res) => {
+    res.json(data);
+});
 
-function verifyDigitalSignature(data, signature, publicKeypath) {
-  try {
-    const publicKey = readfile(publicKeypath);
-    const verify = crypto.createVerify("RSA-SHA256");
-    verify.update(data);
-    return verify.verify(publicKey, signature, "base64");
-  } catch (error) {
-    return false;
-  }
-}
-
-const sign = generateDigitalSignature(
-  "21BIT0224",
-  "key_authority/key/private.pem"
-);
-
-console.log(
-  verifyDigitalSignature("21BIT0224", sign, "key_authority/key/public.pem")
-);
+// Starting the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});

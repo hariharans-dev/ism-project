@@ -63,3 +63,7 @@ module.exports = {
   decryptMessage,
   readfile,
 };
+
+console.log(
+  generateDigitalSignature("21BIT0224", "key_authority/key/private.pem")
+);
