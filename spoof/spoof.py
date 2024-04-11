@@ -14,10 +14,10 @@ def forge_and_send_udp_packet(src_ip, src_port, dst_ip, dst_port, payload):
     # Send the packet
     send(packet)
 
-source_ip = "127.0.0.111"
+source_ip = "192.168.16.65"
 source_port = 10000
-destination_ip = "127.0.0.1"
-destination_port = 4000
+destination_ip = "192.168.16.133"
+destination_port = 3001
 payload_data = {
     "regno": "21BIT0349",
     "sign":"BJr3djKyb6l1B+ZD3jvx17dTdaZkiWGRg8O+g72D2yljFLyNhZLI3d7HnImc4UKdTpqYyKaEObg7uZT5p5M2MDPnPOZCrmrZV/dcx0r0ui+L2zx1ue5qi6Ao9BCVrr7c/ityJQArzEQEGctZthBbsjcwqmPJX0NmHzTfY8nYGCNN6TZt9gKxSO4VcrKDS9wjc7JZJY2XpVD7FcOiaVZ401UkTtTT8m6AZZtilN2QqU/P6XQ+oS88nJPb0ohVWAAPSjbdJgYE3vJiyh0e2QYzhC0aMWtxWFdQ04mpWBD9"
