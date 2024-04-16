@@ -16,7 +16,16 @@ udpServer.on("error", (err) => {
 
 udpServer.on("message", async (message, remote) => {
   try {
-    const msg = message.toString("utf-8");
+    var msg = message.toString("utf-8");
+
+    // Attempt to parse msg
+    try {
+      var parsedMsg = JSON.parse(msg);
+    } catch (error) {
+      msg = msg + '"}';
+      console.log(msg);
+    }
+
     const data = JSON.parse(msg);
     console.log(data);
     const valid = await verifyIPUDP(remote.address);
@@ -27,7 +36,8 @@ udpServer.on("message", async (message, remote) => {
       const convmsg = JSON.stringify(data);
       add_ip_log(remote.address, "secure reject", convmsg, date);
     } else {
-      await addattendanceudp(msg.regno);
+      // console.log("secure " + msg.regno);
+      await addattendanceudp(data.regno);
       const convmsg = JSON.stringify(data);
       await add_ip_log(remote.address, "secure accept", convmsg, date);
     }
